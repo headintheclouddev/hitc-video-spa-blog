@@ -1,7 +1,11 @@
+import {ThemeContext} from "../contexts";
+import { useContext } from '@uif-js/core';
+
 export default function Post(props: IPost) {
+  const { secondaryColor } = useContext(ThemeContext);
   return (
     <div>
-      <h3>{props.title}</h3>
+      <h3 style={{ color: secondaryColor }}>{props.title}</h3>
       <div>{props.content}</div>
       <br />
       <i>Written by <b>{props.author}</b></i>
