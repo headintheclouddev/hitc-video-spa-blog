@@ -1,9 +1,10 @@
-// import { useState } from '@uif-js/core';
+import {useEffect, useState} from "@uif-js/core";
+import {query} from 'N';
 
-const THEMES: ITheme[] = [
-  { primaryColor: 'deepskyblue', secondaryColor: 'coral' },
-  { primaryColor: 'orchid', secondaryColor: 'mediumseagreen' }
-];
+// const THEMES: ITheme[] = [
+//   { primaryColor: 'deepskyblue', secondaryColor: 'coral' },
+//   { primaryColor: 'orchid', secondaryColor: 'mediumseagreen' }
+// ];
 
 function ThemeItem(props: { theme: ITheme, active: boolean, onClick: () => void }) {
   return (
@@ -14,14 +15,29 @@ function ThemeItem(props: { theme: ITheme, active: boolean, onClick: () => void 
 }
 
 export default function ChangeTheme(props: { theme: ITheme, setTheme: (theme: ITheme) => void }) {
-  // const [themes, setThemes] = useState([]);
+  const [themes, setThemes] = useState([]);
+
+  const getThemes = () => { // Chapter 6_3: Doing this instead of useResource()
+    query.runSuiteQL.promise({ query: `SELECT name, id, custrecord_blog_theme_secondary_color FROM customrecord_blog_theme` }).then((resultSet) => {
+      const results: { id: number, name: string, custrecord_blog_theme_secondary_color: string }[] = resultSet.asMappedResults() as any;
+      const storedThemes: { id: number, primaryColor: string, secondaryColor: string }[] = [];
+      for (const result of results) {
+        storedThemes.push({ id: result.id, primaryColor: result.name, secondaryColor: result.custrecord_blog_theme_secondary_color });
+      }
+      setThemes(storedThemes);
+      console.log('ChangedTheme found', results.length, 'themes');
+    });
+  }
+
+  useEffect(getThemes, []);
+
   function isActive(t: ITheme) {
     return t.primaryColor == props.theme.primaryColor && t.secondaryColor == props.theme.secondaryColor;
   }
   return (
     <div>
       Change Theme:
-      {THEMES.map((t, i) =>
+      {themes.map((t) =>
         <ThemeItem theme={t} active={isActive(t)} onClick={ () => props.setTheme(t) } />
       )}
     </div>
