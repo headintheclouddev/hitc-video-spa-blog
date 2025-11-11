@@ -3,7 +3,8 @@ export const ActionType = {
   CREATE_POST: Symbol('createPost'),
   FETCH_POSTS: Symbol('fetchPosts'),
   USER_REGISTER: Symbol('userRegister'),
-  USER_LOGIN: Symbol('userLogin')
+  USER_LOGIN: Symbol('userLogin'),
+  USER_LOGOUT: Symbol('userLogout')
 }
 
 // Action creator functions handle possible side effects (such as CRUD operations), so that the reducer function can be pure.
@@ -30,5 +31,8 @@ export const Action = {
     // TODO: Find contact with these credentials
     let loggedInContactId = 0;
     return { type: ActionType.USER_LOGIN, username, id: loggedInContactId };
+  },
+  userLogout() { // The reducer will clear the logged in user
+    return { type: ActionType.USER_LOGOUT };
   }
 }
