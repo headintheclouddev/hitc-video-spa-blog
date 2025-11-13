@@ -24,13 +24,11 @@ export const Action = {
   },
   userRegister(username: string, password: string) {
     // TODO: Create contact in NetSuite
-    const newContactId = 0;
-    return { type: ActionType.USER_REGISTER, username, id: newContactId };
+    return { type: ActionType.USER_REGISTER, username };
   },
   userLogin(username: string, password: string) {
     // TODO: Find contact with these credentials
-    let loggedInContactId = 0;
-    return { type: ActionType.USER_LOGIN, username, id: loggedInContactId };
+    return { type: ActionType.USER_LOGIN, username };
   },
   userLogout() { // The reducer will clear the logged in user
     return { type: ActionType.USER_LOGOUT };

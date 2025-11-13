@@ -13,12 +13,12 @@ export default function appReducer(state: IAppState, action: any): IAppState {
 }
 
 // Here, state is the currently logged-in user and action is Register, Login, or Logout, along with the new username
-function userReducer(state: string, action: { type: Symbol, user: string }): string {
+function userReducer(state: string, action: { type: Symbol, username: string }): string {
   switch (action.type) {
     case ActionType.USER_LOGIN: // User will have been authenticated by the action function, here we're just returning the user for the app state
-      return action.user;
+      return action.username;
     case ActionType.USER_REGISTER:
-      return action.user;
+      return action.username;
     case ActionType.USER_LOGOUT:
       return '';
     default:
