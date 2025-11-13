@@ -35,15 +35,17 @@ export default function App(): JSX.Element {
   }
 
   return (
-    <VDom.Context value={context}>
-      <div>
-        <h1 style={{ color: theme.primaryColor }}>NetSuite Blog</h1>
-        <ChangeTheme theme={theme} setTheme={setTheme} />
-        <UserBar />
-        <Heading>(When logged in) Create New Post</Heading>
-        <PostList />
-      </div>
-    </VDom.Context>
+    <Store.Provider store={store}>
+      <VDom.Context value={context}>
+        <div>
+          <h1 style={{ color: theme.primaryColor }}>NetSuite Blog</h1>
+          <ChangeTheme theme={theme} setTheme={setTheme} />
+          <UserBar />
+          <Heading>(When logged in) Create New Post</Heading>
+          <PostList />
+        </div>
+      </VDom.Context>
+    </Store.Provider>
   );
 }
 
