@@ -6,6 +6,7 @@ import ChangeTheme from "./components/ChangeTheme";
 import UserBar from "./components/UserBar";
 import {IPost} from "./components/Post";
 import appReducer from "./reducers";
+import {Action} from "./actions";
 
 export default function App(): JSX.Element {
   const initialState: IAppState = { user: '', posts: [], error: '' };
@@ -22,11 +23,17 @@ export default function App(): JSX.Element {
     return store.subscribe(() => setState(store.getState()));
   }, []);
 
+  useEffect(() => {
+    console.log('useEffect - fetchPosts', new Date());
+    store.dispatch(Action.fetchPosts());
+  }, []);
+
   const [theme, setTheme] = useState({ primaryColor: 'deepskyblue', secondaryColor: 'coral' });
   const context = {
     // [StateContext]: { state, dispatch }, // This doesn't work
     [ThemeContext]: theme
   }
+
   return (
     <VDom.Context value={context}>
       <div>
