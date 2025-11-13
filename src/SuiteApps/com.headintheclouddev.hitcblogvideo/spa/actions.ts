@@ -9,10 +9,10 @@ export const ActionType = {
 
 // Action creator functions handle possible side effects (such as CRUD operations), so that the reducer function can be pure.
 export const Action = {
-  createPost(title: string, content: string) {
+  createPost(title: string, content: string, author: string) {
     // TODO: create post record
     const id = 0;
-    return { type: ActionType.CREATE_POST, id, title, content };
+    return { type: ActionType.CREATE_POST, id, title, content, author };
   },
   fetchPosts() {
     // TODO: Look up blog posts in NetSuite
