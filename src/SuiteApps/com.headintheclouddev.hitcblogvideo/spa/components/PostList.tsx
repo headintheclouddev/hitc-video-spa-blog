@@ -1,12 +1,10 @@
-import { JSX, VDom } from "@uif-js/core";
-import Post, {IPost} from "./Post";
+import {JSX, useSelector, VDom} from "@uif-js/core";
+import Post from "./Post";
+import {IAppState} from "../App";
 
 export default function PostList() {
-  // const postsJSON: IPost[] = [
-  //   { author: 'Robbie', title: 'Test Post 1', content: 'It is a beautiful day to be a NetSuite developer!' },
-  //   { author: 'Robbie', title: 'Test Post 2', content: 'Looking forward to SuiteWorld 2026.' }
-  // ];
-  const postsJSON: IPost[] = []; // TODO: Get this from the app state
+  const postsJSON = useSelector((state: IAppState) => state.posts);
+
   const postsList: JSX.Element[] = [];
   for (const post of postsJSON) {
     postsList.push(
