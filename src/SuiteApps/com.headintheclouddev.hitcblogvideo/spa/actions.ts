@@ -11,14 +11,14 @@ export const ActionType = {
 export const Action = {
   createPost(title: string, content: string, author: string) {
     // TODO: create post record
-    const id = 0;
+    const id = Date.now();
     return { type: ActionType.CREATE_POST, id, title, content, author };
   },
   fetchPosts() {
     // TODO: Look up blog posts in NetSuite
     const posts = [ // TODO: Get this from the app state
-      { author: 'Robbie', title: 'Test Post 1', content: 'It is a beautiful day to be a NetSuite developer!' },
-      { author: 'Robbie', title: 'Test Post 2', content: 'Looking forward to SuiteWorld 2026.' }
+      { id: 1, author: 'Robbie', title: 'Test Post 1', content: 'It is a beautiful day to be a NetSuite developer!' },
+      { id: 2, author: 'Robbie', title: 'Test Post 2', content: 'Looking forward to SuiteWorld 2026.' }
     ];
     return { type: ActionType.FETCH_POSTS, posts };
   },
