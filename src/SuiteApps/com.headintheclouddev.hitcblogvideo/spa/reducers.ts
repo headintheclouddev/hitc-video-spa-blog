@@ -27,9 +27,9 @@ function userReducer(state: string, action: { type: Symbol, username: string }):
 }
 
 // Here, the state is the current set of posts, and the action is create or fetch, along with the associated data returned from the action creator function
-function postsReducer(state: IPost[], action: { type: Symbol, title?: string, content?: string, author?: string, posts?: IPost[] }): IPost[] {
+function postsReducer(state: IPost[], action: { type: Symbol, title?: string, content?: string, author?: string, posts?: IPost[], id?: number }): IPost[] {
   if (action.type == ActionType.CREATE_POST) {
-    const newPost: IPost = { title: action.title, content: action.content, author: action.author };
+    const newPost: IPost = { title: action.title, content: action.content, author: action.author, id: action.id };
     return [newPost, ...state];
   } else if (action.type == ActionType.FETCH_POSTS) {
     return action.posts;
