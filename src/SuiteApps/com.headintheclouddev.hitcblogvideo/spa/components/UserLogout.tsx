@@ -1,12 +1,14 @@
 import {Button} from "@uif-js/component";
-import {useSelector} from "@uif-js/core";
+import {useDispatch, useSelector} from "@uif-js/core";
 import {IAppState} from "../App";
+import {Action} from "../actions";
 
 export default function Logout() {
   const user = useSelector((state: IAppState) => state.user);
+  const dispatch = useDispatch();
 
   function handleLogout() {
-    alert('Coming soon');
+    dispatch(Action.userLogout());
   }
 
   return (
