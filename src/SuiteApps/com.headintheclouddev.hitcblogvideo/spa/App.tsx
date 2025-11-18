@@ -1,12 +1,10 @@
 import {JSX, Store, VDom, useMemo, useState, useEffect} from '@uif-js/core';
-import PostList from "./components/PostList";
 import {ThemeContext} from "./contexts";
-import ChangeTheme from "./components/ChangeTheme";
-import UserBar from "./components/UserBar";
 import {IPost} from "./components/Post";
 import appReducer from "./reducers";
 import {Action} from "./actions";
-import CreatePost from "./components/CreatePost";
+import HeaderBar from "./components/page/HeaderBar";
+import HomePage from "./components/page/HomePage";
 
 export default function App(): JSX.Element {
   const initialState: IAppState = { user: '', posts: [], error: '' };
@@ -38,11 +36,8 @@ export default function App(): JSX.Element {
     <Store.Provider store={store}>
       <VDom.Context value={context}>
         <div>
-          <h1 style={{ color: theme.primaryColor }}>NetSuite Blog</h1>
-          <ChangeTheme theme={theme} setTheme={setTheme} />
-          <UserBar />
-          <CreatePost />
-          <PostList />
+          <HeaderBar setTheme={setTheme} theme={theme} />
+          <HomePage />
         </div>
       </VDom.Context>
     </Store.Provider>
