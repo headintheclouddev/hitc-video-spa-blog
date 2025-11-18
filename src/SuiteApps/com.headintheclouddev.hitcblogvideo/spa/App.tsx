@@ -1,10 +1,12 @@
-import {JSX, Store, VDom, useMemo, useState, useEffect} from '@uif-js/core';
+import {JSX, Router, Store, VDom, useMemo, useState, useEffect,} from '@uif-js/core';
 import {ThemeContext} from "./contexts";
 import {IPost} from "./components/Post";
 import appReducer from "./reducers";
 import {Action} from "./actions";
+import {RootRoute} from "./BlogAppRoute";
 import HeaderBar from "./components/page/HeaderBar";
 import HomePage from "./components/page/HomePage";
+import PostPage from "./components/page/PostPage";
 
 export default function App(): JSX.Element {
   const initialState: IAppState = { user: '', posts: [], error: '' };
@@ -33,14 +35,24 @@ export default function App(): JSX.Element {
   }
 
   return (
-    <Store.Provider store={store}>
-      <VDom.Context value={context}>
-        <div>
-          <HeaderBar setTheme={setTheme} theme={theme} />
-          <HomePage />
-        </div>
-      </VDom.Context>
-    </Store.Provider>
+    <Router.Hash>
+      <Store.Provider store={store}>
+        <VDom.Context value={context}>
+          <div>
+            <HeaderBar setTheme={setTheme} theme={theme} />
+            <hr />
+            <Router.Routes>
+              <Router.Route path={RootRoute.HOMEPAGE} exact={true}>
+                <HomePage />
+              </Router.Route>
+              <Router.Route path={RootRoute.POST} exact={true}>
+                <PostPage />
+              </Router.Route>
+            </Router.Routes>
+          </div>
+        </VDom.Context>
+      </Store.Provider>
+    </Router.Hash>
   );
 }
 
