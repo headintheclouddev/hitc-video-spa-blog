@@ -1,3 +1,5 @@
+import query from "N/query";
+
 // This is a list of possible actions. The reducer(s) takes a state, applies one of these actions, and returns a new state.
 export const ActionType = {
   CREATE_POST: Symbol('createPost'),
@@ -15,12 +17,23 @@ export const Action = {
     return { type: ActionType.CREATE_POST, id, title, content, author };
   },
   fetchPosts() {
-    // TODO: Look up blog posts in NetSuite
-    const posts = [ // TODO: Get this from the app state
-      { id: 1, author: 'Robbie', title: 'Test Post 1', content: 'It is a beautiful day to be a NetSuite developer!' },
-      { id: 2, author: 'Robbie', title: 'Test Post 2', content: 'Looking forward to SuiteWorld 2026.' }
-    ];
-    return { type: ActionType.FETCH_POSTS, posts };
+    // const posts = [
+    //   { id: 1, author: 'Robbie', title: 'Test Post 1', content: 'It is a beautiful day to be a NetSuite developer!' },
+    //   { id: 2, author: 'Robbie', title: 'Test Post 2', content: 'Looking forward to SuiteWorld 2026.' }
+    // ];
+    // return { type: ActionType.FETCH_POSTS, posts };
+    return async (dispatch: any) => {
+      const postsQuery = await query.runSuiteQL.promise({
+        query: `
+          SELECT id, name AS title, custrecord_blog_content AS content, BUILTIN.DF(owner) AS author
+          FROM customrecord_blog_post
+          WHERE isInactive = 'F'
+          ORDER BY id DESC
+        `
+      });
+      const posts = postsQuery.asMappedResults();
+      dispatch({ type: ActionType.FETCH_POSTS, posts });
+    }
   },
   userRegister(username: string, password: string) {
     // TODO: Create contact in NetSuite
