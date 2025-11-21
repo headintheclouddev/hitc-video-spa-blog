@@ -1,4 +1,5 @@
 import query from "N/query";
+import record from "N/record";
 
 // This is a list of possible actions. The reducer(s) takes a state, applies one of these actions, and returns a new state.
 export const ActionType = {
@@ -36,8 +37,16 @@ export const Action = {
     }
   },
   userRegister(username: string, password: string) {
-    // TODO: Create contact in NetSuite
-    return { type: ActionType.USER_REGISTER, username };
+    // Create contact in NetSuite
+    return async (dispatch: any) => {
+      const contact = await record.create.promise({ type: 'contact' });
+      contact.setValue('subsidiary', '1');
+      contact.setValue('entityid', username);
+      contact.setValue('custentity_blog_password', password);
+      const contactId = await contact.save.promise();
+      console.log("Successfully created contact", contactId);
+      dispatch({ type: ActionType.USER_REGISTER, username });
+    }
   },
   userLogin(username: string, password: string) {
     // TODO: Find contact with these credentials
