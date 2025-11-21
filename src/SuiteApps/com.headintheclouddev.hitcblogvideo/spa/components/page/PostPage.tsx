@@ -1,7 +1,28 @@
-export default function PostPage() {
+import query from "N/query";
+import {Link} from "@uif-js/component";
+import {useEffect, useState} from "@uif-js/core";
+import Post from "../Post";
+
+export default function PostPage(props: { id?: string }) {
+  const [post, setPost] = useState(null);
+  const getPost = (id: string) => { // Chapter 6_3: Doing this instead of useResource()
+    query.runSuiteQL.promise({
+      query: `SELECT id, name AS title, custrecord_blog_content AS content, BUILTIN.DF(owner) AS author FROM customrecord_blog_post WHERE id = ?`,
+      params: [id]
+    }).then((resultSet) => {
+      const results: { id: number, title: string, content: string, author: string }[] = resultSet.asMappedResults() as any;
+      if (results.length > 0) setPost({ id: results[0].id, data: { title: results[0].title, content: results[0].content, author: results[0].author } });
+    });
+  }
+
+  useEffect(() => {
+    getPost(props.id);
+  }, [props.id]);
   return (
     <div>
-      Coming soon
+      <Link route={{ route: '/' }}>Go back</Link>
+      {(post && post.data) ? <Post {...post.data} /> : 'Loading...'}
+      <hr />
     </div>
   )
 }
