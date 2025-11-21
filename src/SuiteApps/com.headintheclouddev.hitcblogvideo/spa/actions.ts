@@ -49,8 +49,18 @@ export const Action = {
     }
   },
   userLogin(username: string, password: string) {
-    // TODO: Find contact with these credentials
-    return { type: ActionType.USER_LOGIN, username };
+    // Find contact with these credentials
+    return async (dispatch: any) => {
+      const contactQuery = await query.runSuiteQL.promise({
+        query: `SELECT id FROM contact WHERE entityid = ? AND custentity_blog_password = ?`,
+        params: [username, password]
+      });
+      const results: { id: number }[] = contactQuery.asMappedResults() as any;
+      if (results.length == 0) // Failed
+        dispatch({ type: ActionType.USER_LOGIN, username: '' });
+      else
+        dispatch({ type: ActionType.USER_LOGIN, username });
+    }
   },
   userLogout() { // The reducer will clear the logged in user
     return { type: ActionType.USER_LOGOUT };
