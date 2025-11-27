@@ -13,10 +13,20 @@ export const ActionType = {
 
 // Action creator functions handle possible side effects (such as CRUD operations), so that the reducer function can be pure.
 export const Action = {
-  createPost(title: string, content: string, author: string) {
-    // TODO: create post record
-    const id = Date.now();
-    return { type: ActionType.CREATE_POST, id, title, content, author };
+  createPost(title: string, content: string, author: string) { // Create post record
+    return async (dispatch: any) => {
+      record.create.promise({ type: 'customrecord_blog_post' }).then((blogPost) => {
+        blogPost.setValue('name', title);
+        blogPost.setValue('custrecord_blog_content', content);
+        // blogPost.setValue('owner', params.author); // This doesn't work because it isn't the employee id.  maybe revisit after truly implementing login
+        blogPost.save.promise().then((id) => {
+          console.log("Successfully created blog post", id);
+          dispatch({ type: ActionType.CREATE_POST, id, title, content, author });
+        }).catch((error) => {
+          alert(error);
+        });
+      });
+    }
   },
   fetchPosts() {
     return async (dispatch: any) => {
