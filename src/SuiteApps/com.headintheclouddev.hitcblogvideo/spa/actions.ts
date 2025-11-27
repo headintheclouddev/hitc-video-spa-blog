@@ -7,7 +7,8 @@ export const ActionType = {
   FETCH_POSTS: Symbol('fetchPosts'),
   USER_REGISTER: Symbol('userRegister'),
   USER_LOGIN: Symbol('userLogin'),
-  USER_LOGOUT: Symbol('userLogout')
+  USER_LOGOUT: Symbol('userLogout'),
+  LOGIN_ERROR: Symbol('loginError')
 }
 
 // Action creator functions handle possible side effects (such as CRUD operations), so that the reducer function can be pure.
@@ -18,11 +19,6 @@ export const Action = {
     return { type: ActionType.CREATE_POST, id, title, content, author };
   },
   fetchPosts() {
-    // const posts = [
-    //   { id: 1, author: 'Robbie', title: 'Test Post 1', content: 'It is a beautiful day to be a NetSuite developer!' },
-    //   { id: 2, author: 'Robbie', title: 'Test Post 2', content: 'Looking forward to SuiteWorld 2026.' }
-    // ];
-    // return { type: ActionType.FETCH_POSTS, posts };
     return async (dispatch: any) => {
       const postsQuery = await query.runSuiteQL.promise({
         query: `
@@ -36,8 +32,7 @@ export const Action = {
       dispatch({ type: ActionType.FETCH_POSTS, posts });
     }
   },
-  userRegister(username: string, password: string) {
-    // Create contact in NetSuite
+  userRegister(username: string, password: string) { // Create contact in NetSuite
     return async (dispatch: any) => {
       const contact = await record.create.promise({ type: 'contact' });
       contact.setValue('subsidiary', '1');
@@ -48,8 +43,7 @@ export const Action = {
       dispatch({ type: ActionType.USER_REGISTER, username });
     }
   },
-  userLogin(username: string, password: string) {
-    // Find contact with these credentials
+  userLogin(username: string, password: string) { // Find contact with these credentials
     return async (dispatch: any) => {
       const contactQuery = await query.runSuiteQL.promise({
         query: `SELECT id FROM contact WHERE entityid = ? AND custentity_blog_password = ?`,
@@ -57,9 +51,11 @@ export const Action = {
       });
       const results: { id: number }[] = contactQuery.asMappedResults() as any;
       if (results.length == 0) // Failed
-        dispatch({ type: ActionType.USER_LOGIN, username: '' });
-      else
+        dispatch({ type: ActionType.LOGIN_ERROR, error: 'Invalid username or password' });
+      else {
         dispatch({ type: ActionType.USER_LOGIN, username });
+        dispatch({ type: ActionType.LOGIN_ERROR, error: '' }); // Clear any previous error
+      }
     }
   },
   userLogout() { // The reducer will clear the logged in user
