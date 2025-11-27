@@ -1,11 +1,13 @@
 import {TextBox} from "@uif-js/component";
-import {useDispatch, useState} from "@uif-js/core";
+import {useDispatch, useSelector, useState} from "@uif-js/core";
 import {Action} from "../actions";
+import {IAppState} from "../App";
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const loginError = useSelector((state: IAppState) => state.error);
 
   const usernameEventHandlers = {
     [TextBox.Event.TEXT_CHANGED]: ({ text }) => {
@@ -29,6 +31,7 @@ export default function Login() {
       <label htmlFor="login-password">Password:</label>
       <TextBox type={TextBox.Type.PASSWORD} name="login-password" text={password} onTextChanged={handlePassword} />
       <input type="button" value="Login" onClick={handleLogin} />
+      <span style={{color: 'red'}}> {loginError}</span>
     </div>
   )
 }
