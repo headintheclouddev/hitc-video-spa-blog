@@ -9,7 +9,7 @@ export default function PostList() {
   for (const post of postsJSON) {
     postsList.push(
       <VDom.Fragment>
-        <Post {...post} />
+        <Post {...post} short={true} />
         <hr />
       </VDom.Fragment>
     )
