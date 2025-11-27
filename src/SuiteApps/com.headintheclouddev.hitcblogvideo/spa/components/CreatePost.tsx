@@ -24,7 +24,11 @@ export default function CreatePost() {
   }
 
   function handleCreate() {
-    if (title && content) dispatch(Action.createPost(title, content, user));
+    if (title && content) {
+      dispatch(Action.createPost(title, content, user));
+      setTitle('');
+      setContent('');
+    }
   }
 
   return (
